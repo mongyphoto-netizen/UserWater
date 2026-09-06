@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบประเมินองค์กรผู้ใช้น้ำ (20 ข้อ)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { prompt: ['Prompt', 'sans-serif'] },
+                    colors: { primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' } }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; }
+        .radio-label { display: flex; align-items: flex-start; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; cursor: pointer; transition: all 0.2s; }
+        .radio-label:hover { border-color: #3b82f6; background-color: #f0fdf4; }
+        .radio-input:checked + .radio-label { border-color: #2563eb; background-color: #eff6ff; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-primary-700">แบบประเมินและวินิจฉัยศักยภาพ</h1>
+            <a href="index.html" class="text-sm text-slate-500 hover:text-slate-800 flex items-center">
+                <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> กลับหน้าหลัก
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-8">
+        
+        <!-- Intro -->
+        <div id="intro-screen" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 mb-8 max-w-xl mx-auto">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-blue-100 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="clipboard-list" class="w-8 h-8"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-4">เริ่มทำแบบประเมินพฤติกรรม</h2>
+                <p class="text-slate-600 mb-6">ข้อสอบมีทั้งหมด 20 ข้อ โปรดกรอกข้อมูลพื้นฐานก่อนเริ่มทำแบบประเมิน</p>
+            </div>
+            
+            <div class="space-y-4 mb-8 text-left">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">ชื่อ - นามสกุล ผู้ประเมิน</label>
+                    <input type="text" id="input-fullname" class="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all" placeholder="กรอกชื่อและนามสกุล">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">ชื่อองค์กรผู้ใช้น้ำ / กลุ่มผู้ใช้น้ำ</label>
+                    <input type="text" id="input-groupname" class="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all" placeholder="กรอกชื่อกลุ่มของท่าน">
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button onclick="startAssessment()" class="bg-primary-600 text-white font-semibold px-8 py-3 rounded-full hover:bg-primary-700 transition-colors w-full sm:w-auto">
+                    เริ่มทำแบบประเมิน
+                </button>
+            </div>
+        </div>
+
+        <!-- Question Container -->
+        <div id="question-container" class="hidden">
+            <div class="mb-4 flex justify-between text-sm text-slate-500 font-medium">
+                <span id="progress-text">ข้อ 1 / 20</span>
+                <span id="part-text">ส่วนที่ 1</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2 mb-8">
+                <div id="progress-bar" class="bg-primary-600 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                <h3 id="question-title" class="text-xl font-semibold mb-6">...</h3>
+                
+                <div id="options-container" class="space-y-4">
+                    <!-- Options injected here -->
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button id="prev-btn" onclick="prevQuestion()" class="px-6 py-2 border border-slate-300 text-slate-600 rounded-full hover:bg-slate-50 hidden">ย้อนกลับ</button>
+                    <div class="flex-1"></div>
+                    <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2 bg-primary-600 text-white rounded-full hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>ถัดไป</button>
+                    <button id="submit-btn" onclick="submitAssessment()" class="px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 hidden disabled:opacity-50 disabled:cursor-not-allowed" disabled>ดูผลประเมิน</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Container -->
+        <div id="result-container" class="hidden bg-white rounded-2xl p-8 shadow-sm border border-slate-200 text-center relative overflow-hidden">
+            <div id="result-icon" class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-white">
+                <i data-lucide="award" class="w-10 h-10"></i>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-slate-800" id="display-groupname">...</h3>
+                <p class="text-sm text-slate-500" id="display-fullname">ผู้ประเมิน: ...</p>
+            </div>
+
+            <div class="text-sm font-semibold mb-2" id="result-group-number">กลุ่มที่ ...</div>
+            <h2 id="result-title" class="text-3xl font-bold mb-2">...</h2>
+            <p id="result-subtitle" class="text-slate-500 font-medium mb-6">...</p>
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 mb-6 text-left inline-block w-full max-w-2xl">
+                
+                <!-- Image Header -->
+                <div class="mb-6 rounded-lg overflow-hidden shadow-sm h-48 md:h-64 relative bg-slate-200">
+                    <img id="result-image" src="" alt="Group Image" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 right-4 text-white font-semibold">
+                        ลักษณะของกลุ่มในระยะนี้
+                    </div>
+                </div>
+
+                <p id="result-desc" class="text-slate-800 font-bold mb-4 text-lg border-b pb-2"></p>
+                
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed mb-6">
+                    <div id="result-detail-1" class="flex items-start"><i data-lucide="activity" class="w-5 h-5 text-primary-500 mr-2 flex-shrink-0 mt-0.5"></i> <span></span></div>
+                    <div id="result-detail-2" class="flex items-start"><i data-lucide="users-2" class="w-5 h-5 text-primary-500 mr-2 flex-shrink-0 mt-0.5"></i> <span></span></div>
+                    <div id="result-detail-3" class="flex items-start"><i data-lucide="alert-triangle" class="w-5 h-5 text-red-500 mr-2 flex-shrink-0 mt-0.5"></i> <span></span></div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-slate-200 grid grid-cols-2 gap-4 text-center">
+                    <div>
+                        <div class="text-xs text-slate-500">คะแนนแกน X (การมีส่วนร่วม)</div>
+                        <div class="font-bold text-lg text-primary-700" id="score-x">0.00</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-500">คะแนนแกน Y (ศักยภาพผู้นำ)</div>
+                        <div class="font-bold text-lg text-primary-700" id="score-y">0.00</div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <a href="assessment.html" class="inline-block px-8 py-3 border border-primary-600 text-primary-600 rounded-full hover:bg-primary-50">ทำแบบประเมินอีกครั้ง</a>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>© 2024 โครงการประเมินศักยภาพองค์กรผู้ใช้น้ำ</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        const questions = [{"id":"X1","text":"การเข้าร่วมประชุมปรึกษาหารือเรื่องน้ำของสมาชิก","options":[{"key":"ก","text":"สมาชิกมาประชุมพร้อมเพรียงเกินร้อยละ 70 มีการถกเถียงและลงมติร่วมกันจริง","score":4},{"key":"ข","text":"จัดประชุมเฉพาะตอนที่เจ้าหน้าที่รัฐหรือ อปท. นัดรวมตัวเพื่อชี้แจงโครงการ","score":2},{"key":"ค","text":"มีการเรียกประชุมปีละ 1–2 ครั้ง แต่มาไม่ถึงครึ่ง ส่วนใหญ่ส่งตัวแทนมาเซ็นชื่อ","score":3},{"key":"ง","text":"ไม่เคยมีการจัดประชุมสมาชิกเลยตั้งแต่ตั้งกลุ่มมา","score":1}]},{"id":"X2","text":"การลงแรงบำรุงรักษา ขุดลอก หรือซ่อมแซมระบบน้ำ","options":[{"key":"ก","text":"ปล่อยให้เป็นหน้าที่ของ อปท. หรือชลประทานนำเครื่องจักรมาขุดลอก ชาวบ้านไม่เคยลงแรง","score":1},{"key":"ข","text":"นัดหมายลงแรงร่วมกันเป็นประจำตามรอบเวร มีกติกาชัดเจน และสมาชิกร่วมมือเกินร้อยละ 80","score":4},{"key":"ค","text":"รวมตัวลงแรงเฉพาะเวลาที่มีงบโครงการจ้างงาน หรือมีกิจกรรมจิตอาสาที่ราชการจัดขึ้น","score":2},{"key":"ง","text":"มีการชวนกันไปลอกเหมืองซ่อมฝายบ้างปีละครั้ง แต่มาเฉพาะกลุ่มสนิทไม่กี่คน","score":3}]},{"id":"X3","text":"การสมทบเงินหรือการตั้งกองทุนบริหารจัดการน้ำ","options":[{"key":"ก","text":"สมาชิกเก็บเงินลงขันเป็นกองทุนประจำ มีกติกาชัดเจน และเงินนี้ใช้ดูแลระบบน้ำได้ต่อเนื่อง","score":4},{"key":"ข","text":"ไม่มีการเก็บเงินใดๆ ทั้งสิ้น เพราะถือว่าเป็นหน้าที่ของทางราชการที่ต้องจัดหางบมาให้","score":1},{"key":"ค","text":"เคยเรี่ยไรเงินเป็นครั้งคราวเฉพาะตอนที่ท่อแตก ฝายพัง หรือเกิดเหตุฉุกเฉินเฉพาะหน้า","score":3},{"key":"ง","text":"มีเงินกองทุนอยู่บ้าง แต่เป็นเงินก้อนที่เหลือทิ้งไว้จากงบอุดหนุนของโครงการรัฐในอดีต","score":2}]},{"id":"X4","text":"ความเป็นเจ้าของและการมีส่วนร่วมในกติกาการใช้น้ำ","options":[{"key":"ก","text":"ผู้นำหรือผู้ใหญ่บ้านเป็นคนตั้งกติกาและสั่งการเองทั้งหมด ชาวบ้านมีหน้าที่แค่ทำตาม","score":2},{"key":"ข","text":"สมาชิกร่วมกันร่างกติกาปันน้ำ หากใครฝ่าฝืนมีบทลงโทษที่ตกลงร่วมกันและบังคับใช้จริง","score":4},{"key":"ค","text":"ต่างคนต่างสูบ ต่างคนต่างใช้ ใครมีเครื่องสูบใหญ่หรืออยู่ต้นน้ำก็ได้ใช้น้ำก่อน","score":1},{"key":"ง","text":"มีการตกลงเรื่องรอบเวร แต่เวลาปฏิบัติจริงมักมีคนแอบลักขโมยน้ำโดยไม่มีใครกล้าตักเตือน","score":3}]},{"id":"X5","text":"การจัดการข้อขัดแย้งการแย่งน้ำระหว่างสมาชิก","options":[{"key":"ก","text":"สมาชิกในกลุ่มเปิดอกพูดคุยและไกล่เกลี่ยกันเองได้ตามข้อตกลง โดยไม่ต้องพึ่งคนนอก","score":4},{"key":"ข","text":"เมื่อเกิดการแย่งน้ำ มักทะเลาะเบาะแว้งรุนแรงและปล่อยให้บาดหมางกันไปเอง","score":1},{"key":"ค","text":"ต้องรอให้ผู้ใหญ่บ้าน กำนัน หรือนายอำเภอลงมาเป็นคนชี้ขาด กลุ่มไม่สามารถเคลียร์กันเองได้","score":2},{"key":"ง","text":"มีการตั้งคณะกรรมการประนีประนอม แต่การตัดสินยังขึ้นกับความเกรงใจผู้มีอิทธิพลในพื้นที่","score":3}]},{"id":"X6","text":"การรับรู้ข้อมูลสถานการณ์น้ำและกิจกรรมของกลุ่ม","options":[{"key":"ก","text":"สมาชิกส่วนใหญ่ไม่เคยรู้ข้อมูลอะไรเลย รู้เฉพาะวันที่น้ำไม่ไหลเข้าแปลงตนเอง","score":1},{"key":"ข","text":"รับรู้ข้อมูลผ่านการบอกเล่าปากต่อปากของเพื่อนบ้านเป็นครั้งคราว","score":2},{"key":"ค","text":"ผู้นำแจ้งข้อมูลสถานการณ์น้ำเป็นระยะผ่านเสียงตามสาย แต่ไม่มีช่องทางให้สมาชิกซักถาม","score":3},{"key":"ง","text":"มีกลุ่มไลน์ชุมชนหรือบอร์ดประชาสัมพันธ์แจ้งระดับน้ำ รอบเวร และสถานะการเงินอย่างโปร่งใส","score":4}]},{"id":"X7","text":"การมีส่วนร่วมของกลุ่มสตรี เยาวชน และกลุ่มเปราะบาง","options":[{"key":"ก","text":"มีตัวแทนสตรีหรือคนรุ่นใหม่ร่วมเป็นคณะกรรมการและมีบทบาทเสนอความเห็นอย่างชัดเจน","score":4},{"key":"ข","text":"ให้ผู้ชายหรือหัวหน้าครัวเรือนสูงอายุเป็นคนตัดสินใจทั้งหมด ผู้หญิงหรือคนรุ่นใหม่ไม่มีบทบาท","score":1},{"key":"ค","text":"ผู้หญิงหรือคนรุ่นใหม่มาร่วมประชุมบ้าง แต่มีหน้าที่แค่งานธุรการ เตรียมน้ำดื่ม หรือจัดสถานที่","score":2},{"key":"ง","text":"สตรีมีบทบาทเฉพาะฝ่ายตรวจนับเงิน/บัญชี แต่ไม่มีบทบาทในการตัดสินใจเรื่องการจัดสรรน้ำ","score":3}]},{"id":"X8","text":"การเฝ้าระวังและการดูแลรักษาคุณภาพน้ำร่วมกัน","options":[{"key":"ก","text":"ใครจะทิ้งขยะ ปล่อยน้ำเสีย หรือใช้สารเคมีริมตลิ่งก็ไม่มีใครสนใจ ถือเป็นเรื่องส่วนบุคคล","score":1},{"key":"ข","text":"มีกติกาห้ามทิ้งสิ่งปฏิกูล สมาชิกร่วมสอดส่องและกล้าตักเตือนผู้ฝ่าฝืนเพื่อรักษาส่วนรวม","score":4},{"key":"ค","text":"เฝ้าระวังเฉพาะเวลามีหน่วยงานสิ่งแวดล้อมลงมาตรวจวัดคุณภาพน้ำ","score":2},{"key":"ง","text":"มีป้ายเตือนของชุมชนติดตั้งไว้ แต่ยังพบการลักลอบปล่อยของเสียลงแหล่งน้ำอยู่เนืองๆ","score":3}]},{"id":"X9","text":"การเตรียมความพร้อมเผชิญเหตุน้ำท่วมหรือน้ำแล้งในแปลงตนเอง","options":[{"key":"ก","text":"สมาชิกปรับตารางเพาะปลูก ขุดสระสำรอง หรือทำคันดินป้องกันล่วงหน้าร่วมกันตามคำเตือน","score":4},{"key":"ข","text":"รอรับการแจกจ่ายถุงยังชีพหรือเงินชดเชยเยียวยาจากรัฐเมื่อเกิดความเสียหาย","score":1},{"key":"ค","text":"ต่างคนต่างแก้ปัญหาเฉพาะหน้าตามมีตามเกิดเมื่อภัยมาถึงตัว","score":2},{"key":"ง","text":"ช่วยกันทำแนวกระสอบทรายเฉพาะจุดสำคัญ แต่ยังขาดแผนการเคลื่อนย้ายผลผลิตที่เป็นระบบ","score":3}]},{"id":"X10","text":"ความรู้สึกเป็นเจ้าของต่อโครงสร้างพื้นฐานแหล่งน้ำ","options":[{"key":"ก","text":"ปล่อยให้ชำรุดทรุดโทรม หากฝายพังหรือคูคลองตันจะรอโครงการรัฐมาสร้างให้ใหม่","score":1},{"key":"ข","text":"สมาชิกถือว่าฝาย คลองส่งน้ำ และประตูระบายน้ำเป็นสมบัติของกลุ่ม ช่วยกันซ่อมทันทีที่ชำรุด","score":4},{"key":"ค","text":"ชุมชนช่วยดูแลทำความสะอาดได้ แต่ถ้าเป็นงานซ่อมแซมแม้เพียงเล็กน้อยจะรอช่าง อปท. เท่านั้น","score":2},{"key":"ง","text":"สมาชิกสมทบวัสดุอุปกรณ์ในท้องถิ่นมาซ่อมแซมชั่วคราวระหว่างรอทำเรื่องของบประมาณ","score":3}]},{"id":"Y1","text":"โครงสร้างการทำงานของคณะกรรมการกลุ่ม","options":[{"key":"ก","text":"แบ่งฝ่ายรับผิดชอบชัดเจน (ฝ่ายส่งน้ำ ฝ่ายซ่อมบำรุง เหรัญญิก) ทำงานแทนกันได้จริง","score":4},{"key":"ข","text":"มีชื่อกรรมการครบตามเอกสารที่ส่ง สนทช. แต่ประธานเป็นคนวิ่งเต้นและทำอยู่คนเดียว","score":2},{"key":"ค","text":"ไม่มีคณะกรรมการ มีแต่ตัวแทนชุมชน 1–2 คนคอยประสานงานเฉพาะเวลาราชการติดต่อมา","score":1},{"key":"ง","text":"มีกรรมการหลายคน แต่ทุกเรื่องต้องรอประธานสั่งการ กรรมการอื่นไม่กล้าตัดสินใจ","score":3}]},{"id":"Y2","text":"ระบบเอกสาร บัญชี และความโปร่งใส","options":[{"key":"ก","text":"มีสมุดบัญชีรายรับ-รายจ่าย จดบันทึกการใช้น้ำ และรายงานสรุปเงินให้สมาชิกตรวจสอบทุกปี","score":4},{"key":"ข","text":"ไม่เคยทำบัญชีหรือเอกสารใดๆ เงินเข้าเงินออกจำด้วยวาจาหรือขึ้นกับตัวบุคคล","score":1},{"key":"ค","text":"ประธานหรือเหรัญญิกเก็บสมุดบัญชีไว้ที่บ้านคนเดียว สมาชิกไม่ค่อยมีใครได้เห็น","score":2},{"key":"ง","text":"บันทึกบัญชีเฉพาะช่วงที่มีงบโครงการลงมา พอโครงการจบเอกสารก็ไม่ได้อัปเดตต่อ","score":3}]},{"id":"Y3","text":"การเชื่อมโยงภายนอกและการผลักดันข้อเสนอ (Advocacy)","options":[{"key":"ก","text":"คณะกรรมการรู้ช่องทาง สามารถเขียนโครงการขอรับการสนับสนุนจาก อปท. หรือส่งเข้าแผนลุ่มน้ำได้","score":4},{"key":"ข","text":"รอรับการสนับสนุนตามที่ อปท. จัดสรรมาให้ ไม่เคยทำข้อเสนอโครงการเชิงรุก","score":2},{"key":"ค","text":"ไม่เคยติดต่อประสานงานกับภายนอกเลย ไม่รู้ว่าต้องติดต่อใครหรือทำอย่างไร","score":1},{"key":"ง","text":"ประธานมีเส้นสายเข้าพบผู้ใหญ่ในจังหวัดได้เก่ง แต่ไม่มีเอกสารข้อเสนอโครงการที่เป็นระบบ","score":3}]},{"id":"Y4","text":"การใช้ข้อมูล เทคโนโลยี และการเตือนภัยน้ำ","options":[{"key":"ก","text":"สังเกตธรรมชาติหรือรอดูสถานการณ์น้ำหน้างาน ไม่มีระบบตรวจวัดหรือแผนที่ใดๆ","score":2},{"key":"ข","text":"ใช้กลุ่มไลน์เตือนภัย ใช้แอป/เรดาร์ฝน หรือมีจุดวัดระดับน้ำชุมชนเพื่อวางแผนรับมือน้ำท่วม-แล้ง","score":4},{"key":"ค","text":"ไม่มีข้อมูลและไม่มีการแจ้งเตือน หากน้ำมาฉับพลันก็ต่างคนต่างหนีหรือรอฟังประกาศหอกระจายข่าว","score":1},{"key":"ง","text":"มีอุปกรณ์วัดน้ำที่หน่วยงานนำมาติดตั้งให้ แต่ไม่มีใครในกลุ่มอ่านค่าเป็นหรือใช้งานจริง","score":3}]},{"id":"Y5","text":"แผนสืบทอดตำแหน่งและภาวะผู้นำรุ่นใหม่ (Succession Planning)","options":[{"key":"ก","text":"หากประธานคนปัจจุบันไม่อยู่ กลุ่มจะหยุดทำงานทันทีเพราะไม่มีใครสานต่อได้","score":1},{"key":"ข","text":"มีรองประธานหรือคนรุ่นใหม่ที่ร่วมทำงานเคียงข้าง และพร้อมขึ้นทำหน้าที่แทนได้ทันที","score":4},{"key":"ค","text":"มีการพูดคุยเรื่องหาคนแทน แต่ยังไม่มีใครยอมรับหน้าที่ต่อเพราะเกรงภาระงาน","score":2},{"key":"ง","text":"กำหนดตัวผู้สืบทอดไว้แล้ว แต่ยังไม่ได้เปิดโอกาสให้เข้ามาฝึกตัดสินใจเรื่องสำคัญจริง","score":3}]},{"id":"Y6","text":"การจัดทำฐานข้อมูลและแผนที่ทรัพยากรน้ำของชุมชน","options":[{"key":"ก","text":"มีแผนที่ทำมือหรือแผนที่ GIS แสดงตำแหน่งแหล่งน้ำ ฝาย คลองส่งน้ำ และแปลงเกษตรชัดเจน","score":4},{"key":"ข","text":"ไม่มีแผนที่หรือบันทึกข้อมูลใดๆ ทุกอย่างอยู่ในความทรงจำของผู้นำและคนเฒ่าคนแก่","score":1},{"key":"ค","text":"มีแผนที่ผังน้ำเดิมที่หน่วยงานรัฐเคยเอามาให้เมื่อหลายปีก่อน แต่ไม่อัปเดตสภาพปัจจุบัน","score":2},{"key":"ง","text":"มีการจดบันทึกรายชื่อผู้ใช้น้ำและขนาดพื้นที่ถือครอง แต่ยังไม่มีการลงพิกัดแปลงหรือผังน้ำ","score":3}]},{"id":"Y7","text":"บทบาทในเวทีระดับลุ่มน้ำย่อยและคณะกรรมการลุ่มน้ำ (คบล.)","options":[{"key":"ก","text":"เคยส่งตัวแทนไปร่วมประชุมเวทีลุ่มน้ำของ สนทช. และสะท้อนปัญหาเชิงพื้นที่อย่างต่อเนื่อง","score":4},{"key":"ข","text":"ไม่เคยรู้มาก่อนว่ากลุ่มตนเองมีสิทธิส่งตัวแทนไปร่วมคัดเลือกเป็นกรรมการลุ่มน้ำ","score":1},{"key":"ค","text":"เคยไปร่วมหยั่งเสียงเลือกตั้งกรรมการลุ่มน้ำตามที่ราชการแจ้ง แต่หลังจากนั้นไม่เคยติดต่ออีก","score":2},{"key":"ง","text":"ทราบสิทธิตาม พ.ร.บ.ทรัพยากรน้ำ แต่ยังไม่เคยส่งตัวแทนเข้าร่วมเพราะมองว่าเป็นเรื่องไกลตัว","score":3}]},{"id":"Y8","text":"การประสานงานร่วมกับภาคีเครือข่ายวิชาการและเอกชน","options":[{"key":"ก","text":"ดำเนินงานเฉพาะกลุ่มตนเอง ไม่เคยประสานงานหรือขอความร่วมมือกับหน่วยงานอื่นนอกชุมชน","score":1},{"key":"ข","text":"ร่วมมือกับมหาวิทยาลัย ภาคประชาสังคม หรือเอกชนในพื้นที่เพื่อนำความรู้และงบมาพัฒนาน้ำ","score":4},{"key":"ค","text":"เคยมีคณะอาจารย์หรือนักวิจัยเข้ามาเก็บข้อมูล แต่พอทำงานวิจัยเสร็จก็ไม่ได้ติดต่อกันต่อ","score":2},{"key":"ง","text":"ได้รับการสนับสนุนเงินผ้าป่าหรือของบริจาคจากเอกชนเป็นครั้งคราว แต่ไม่มีโครงการพัฒนาระยะยาว","score":3}]},{"id":"Y9","text":"ทักษะการเจรจาต่อรองและการจัดสรรน้ำข้ามพื้นที่ (Upstream-Downstream)","options":[{"key":"ก","text":"ผู้นำสามารถเจรจากับกลุ่มต้นน้ำ-ปลายน้ำข้างเคียงเพื่อตกลงรอบเวรการเปิดปิดน้ำอย่างเป็นธรรม","score":4},{"key":"ข","text":"หากพื้นที่ข้างเคียงกักน้ำ จะทะเลาะขัดแย้งกันทันทีและไม่สามารถตกลงกันได้","score":1},{"key":"ค","text":"อาศัยการร้องเรียนผ่านศูนย์ดำรงธรรมหรือแจ้งนายอำเภอให้มาสั่งการกลุ่มข้างเคียง","score":2},{"key":"ง","text":"มีการนัดคุยกับกลุ่มข้างเคียงบ้าง แต่ส่วนใหญ่กลุ่มตนเองต้องยอมเสียเปรียบเพราะอำนาจต่อรองน้อย","score":3}]},{"id":"Y10","text":"การประเมินผลและการถอดบทเรียนการทำงาน (Reflection & Adaptation)","options":[{"key":"ก","text":"มีการจัดเวทีสรุปบทเรียนหลังสิ้นสุดฤดูน้ำหลากหรือหน้าแล้ง เพื่อนำข้อผิดพลาดมาแก้กติกาปีถัดไป","score":4},{"key":"ข","text":"สิ้นสุดฤดูก็แยกย้าย ไม่เคยมีการคุยทบทวนปัญหา ปล่อยให้ปัญหาเดิมเกิดขึ้นซ้ำทุกปี","score":1},{"key":"ค","text":"สรุปผลเฉพาะเวลาที่หน่วยงานผู้ให้งบประมาณบังคับให้ส่งรายงานผลการดำเนินงาน","score":2},{"key":"ง","text":"คณะกรรมการคุยทบทวนกันเองอย่างไม่เป็นทางการ แต่ไม่ได้แจ้งสมาชิกหรือบันทึกเป็นแนวทางปฏิบัติ","score":3}]}];
+        const answers = new Array(questions.length).fill(null);
+        let currentIndex = 0;
+
+        const groups = [
+            { 
+                id: 1, 
+                title: "กลุ่มในนาม / พักตัว", 
+                sub: "Paper/Dormant", 
+                color: "bg-slate-400", 
+                image: "https://images.unsplash.com/photo-1510619888998-35de6987f4c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                desc: "มีการจดทะเบียนแต่ไม่มีการดำเนินกิจกรรมอย่างต่อเนื่อง ขาดการมีส่วนร่วมของสมาชิก",
+                detail1: "พฤติกรรมเชิงประจักษ์: จดทะเบียนเป็นองค์กรผู้ใช้น้ำตามกฎหมาย แต่ในทางปฏิบัติ 'ไร้การขับเคลื่อน' (Inactive) คณะกรรมการมีชื่อแต่ไม่เคยประชุม สมาชิกไม่มีส่วนร่วมใดๆ การบริหารจัดการน้ำเป็นแบบต่างคนต่างทำ",
+                detail2: "ปฏิสัมพันธ์กับภายนอก: ปราศจากการติดต่อประสานงานกับหน่วยงานรัฐ หรือ อปท. รอเพียงการประกาศภัยพิบัติเพื่อให้รัฐเข้ามาช่วยเหลือเยียวยาเท่านั้น",
+                detail3: "จุดตายเชิงโครงสร้าง: ขาดจิตสำนึกส่วนรวม (Lack of Collective Action) และไม่มีโครงสร้างการสื่อสารภายในกลุ่ม"
+            },
+            { 
+                id: 2, 
+                title: "กลุ่มพึ่งพารัฐ", 
+                sub: "State-Dependent", 
+                color: "bg-orange-500", 
+                image: "https://images.unsplash.com/photo-1541888081-325f68cc53e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                desc: "ดำเนินกิจกรรมได้เมื่อมีงบประมาณหรือเจ้าหน้าที่รัฐคอยกำกับดูแล ยังไม่สามารถบริหารจัดการตนเองได้เต็มที่",
+                detail1: "พฤติกรรมเชิงประจักษ์: การรวมกลุ่มเกิดขึ้นจากนโยบายแบบ Top-Down เพื่อให้เข้าเงื่อนไขในการรับงบประมาณขุดลอกคลองหรือซ่อมฝาย สมาชิกจะรวมตัวกันเฉพาะช่วงที่มีงบประมาณลงมา",
+                detail2: "ปฏิสัมพันธ์กับภายนอก: การตัดสินใจและการวางแผนถูกกำหนดโดยข้าราชการหรือผู้นำท้องถิ่น หากหน่วยงานรัฐหยุดสนับสนุน กิจกรรมของกลุ่มจะหยุดชะงักทันที",
+                detail3: "จุดตายเชิงโครงสร้าง: ขาดความเป็นเจ้าของร่วม (Sense of Ownership) และไม่มีระบบบริหารการเงิน/บำรุงรักษาด้วยตนเอง"
+            },
+            { 
+                id: 3, 
+                title: "กลุ่มผู้นำเดี่ยว", 
+                sub: "Single-Leader Dominated", 
+                color: "bg-purple-500", 
+                image: "https://images.unsplash.com/photo-1506869640319-fea1a288d712?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                desc: "มีผลงานโดดเด่นแต่พึ่งพาผู้นำคนใดคนหนึ่งเป็นหลัก ขาดการกระจายอำนาจและการสร้างผู้สืบทอด",
+                detail1: "พฤติกรรมเชิงประจักษ์: มีกิจกรรมขับเคลื่อนอย่างต่อเนื่องและตอบสนองต่อปัญหาได้เร็วมาก แต่พลังขับเคลื่อนทั้งหมดมาจากบารมี ความเสียสละ หรือเส้นสายของผู้นำเพียงคนเดียว ผู้นำเป็นคนตัดสินใจทุกเรื่อง",
+                detail2: "ปฏิสัมพันธ์กับภายนอก: ภายนอกมองว่าเป็นกลุ่มตัวอย่างที่เข้มแข็ง หน่วยงานรัฐชอบลงพื้นที่เพราะประสานงานง่าย คุยกับคนเดียวจบ แต่สมาชิกทำหน้าที่เพียงผู้ตาม",
+                detail3: "จุดตายเชิงโครงสร้าง: ความเสี่ยงสูงมากต่อตัวบุคคล (Key Person Dependency) หากขาดผู้นำ กลุ่มจะแตกสลายหรือลดระดับลงทันที"
+            },
+            { 
+                id: 4, 
+                title: "กลุ่มจัดการตนเอง", 
+                sub: "Collective Self-Governing", 
+                color: "bg-blue-500", 
+                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                desc: "สมาชิกร่วมกันตั้งกติกา มีการลงขันหรือกองทุน และบริหารจัดการข้อขัดแย้งในชุมชนได้ด้วยตนเอง",
+                detail1: "พฤติกรรมเชิงประจักษ์: ขับเคลื่อนด้วยโครงสร้างสถาบันชุมชน มีการกระจายอำนาจผ่านคณะกรรมการหลายฝ่าย มีกติกาปันน้ำที่ทุกคนยอมรับ มีการระดมทุนร่วมกันบำรุงรักษาระบบน้ำสม่ำเสมอ",
+                detail2: "ปฏิสัมพันธ์กับภายนอก: มีอำนาจต่อรองกับ อปท. และหน่วยงานรัฐ สามารถไกล่เกลี่ยข้อพิพาทเรื่องน้ำในระดับพื้นที่ได้เองโดยไม่ต้องพึ่งพาระบบราชการ",
+                detail3: "จุดตายเชิงโครงสร้าง: มักจำกัดขอบเขตการทำงานอยู่เฉพาะแหล่งน้ำของตนเอง และยังขาดเครื่องมือทางวิทยาศาสตร์ในการคาดการณ์ภัยพิบัติ"
+            },
+            { 
+                id: 5, 
+                title: "กลุ่มบูรณาการเชิงนโยบาย", 
+                sub: "Dynamic Champion", 
+                color: "bg-green-500", 
+                image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                desc: "มีความเข้มแข็งสูง สามารถต่อรอง เชื่อมโยงเครือข่ายภายนอก และผลักดันนโยบายระดับลุ่มน้ำได้",
+                detail1: "พฤติกรรมเชิงประจักษ์: สมาชิกมีส่วนร่วมอย่างเข้มแข็ง มีการประยุกต์ใช้ข้อมูลสารสนเทศ เช่น แผนที่พิกัด GIS ระบบตรวจวัดระดับน้ำ หรือการแจ้งเตือนภัยล่วงหน้า มีกองทุนหมุนเวียนที่มั่นคง",
+                detail2: "ปฏิสัมพันธ์กับภายนอก: ทำงานเชื่อมโยงแบบพหุภาคี (มหาวิทยาลัย, เอกชน, รัฐ) มีตัวแทนเข้าไปมีบทบาทในคณะกรรมการลุ่มน้ำ (คบล.) เสนอโครงการเข้าสู่แผนแม่บทลุ่มน้ำได้อย่างมีหลักวิชาการ",
+                detail3: "จุดตายเชิงโครงสร้าง: ข้อจำกัดด้านอำนาจทางกฎหมายในการจัดการน้ำข้ามเขตพื้นที่ หรือปัญหาความล่าช้าของระเบียบงบประมาณภาครัฐที่ตามไม่ทันชุมชน"
+            }
+        ];
+
+        function startAssessment() {
+            const fullname = document.getElementById('input-fullname').value.trim();
+            const groupname = document.getElementById('input-groupname').value.trim();
+            
+            if (!fullname || !groupname) {
+                alert('กรุณากรอก "ชื่อ-นามสกุล" และ "ชื่อองค์กรผู้ใช้น้ำ" ให้ครบถ้วนก่อนเริ่มทำแบบประเมิน');
+                return;
+            }
+            
+            // Save to display later
+            document.getElementById('display-fullname').innerText = `ผู้ประเมิน: ${fullname}`;
+            document.getElementById('display-groupname').innerText = groupname;
+
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('question-container').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            document.getElementById('progress-text').innerText = `ข้อ ${currentIndex + 1} / ${questions.length}`;
+            document.getElementById('part-text').innerText = q.id.startsWith('X') ? 'ส่วนที่ 1: การมีส่วนร่วม' : 'ส่วนที่ 2: ศักยภาพการบริหาร';
+            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
+            
+            document.getElementById('question-title').innerText = `ข้อ ${q.id}: ${q.text}`;
+            
+            let optsHtml = '';
+            q.options.forEach((opt, idx) => {
+                const isChecked = answers[currentIndex] === opt.score ? 'checked' : '';
+                optsHtml += `
+                    <div class="relative">
+                        <input type="radio" name="q_opt" id="opt_${idx}" value="${opt.score}" class="radio-input peer sr-only" onchange="selectOption(${opt.score})" ${isChecked}>
+                        <label for="opt_${idx}" class="radio-label">
+                            <span class="font-bold mr-2">${opt.key}.</span>
+                            <span>${opt.text}</span>
+                        </label>
+                    </div>
+                `;
+            });
+            document.getElementById('options-container').innerHTML = optsHtml;
+
+            // Buttons state
+            document.getElementById('prev-btn').classList.toggle('hidden', currentIndex === 0);
+            
+            const isLast = currentIndex === questions.length - 1;
+            document.getElementById('next-btn').classList.toggle('hidden', isLast);
+            document.getElementById('submit-btn').classList.toggle('hidden', !isLast);
+            
+            updateNextButtonState();
+        }
+
+        function selectOption(score) {
+            answers[currentIndex] = score;
+            updateNextButtonState();
+        }
+
+        function updateNextButtonState() {
+            const hasAnswer = answers[currentIndex] !== null;
+            document.getElementById('next-btn').disabled = !hasAnswer;
+            document.getElementById('submit-btn').disabled = !hasAnswer;
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+            }
+        }
+
+        function submitAssessment() {
+            document.getElementById('question-container').classList.add('hidden');
+            document.getElementById('result-container').classList.remove('hidden');
+            
+            // Calculate scores
+            let scoreX = 0;
+            let scoreY = 0;
+            let y1_score = 0;
+            let y5_score = 0;
+            let x1_score = 0;
+            let x2_x3_score = 0;
+
+            questions.forEach((q, idx) => {
+                const score = answers[idx];
+                if (q.id.startsWith('X')) {
+                    scoreX += score;
+                    if (q.id === 'X1') x1_score = score;
+                    if (q.id === 'X2' || q.id === 'X3') x2_x3_score += score;
+                } else {
+                    scoreY += score;
+                    if (q.id === 'Y1') y1_score = score;
+                    if (q.id === 'Y5') y5_score = score;
+                }
+            });
+
+            const avgX = scoreX / 10;
+            const avgY = scoreY / 10;
+            
+            document.getElementById('score-x').innerText = avgX.toFixed(2);
+            document.getElementById('score-y').innerText = avgY.toFixed(2);
+
+            let group = 1;
+            if (avgX < 1.75 && avgY < 1.75) {
+                group = 1; // Group 1
+            } else if (avgX >= 1.75 && avgX <= 2.50 && avgY >= 1.75 && avgY <= 2.50) {
+                group = 2;
+            } else if (avgX < 2.50 && avgY >= 2.75 && (y1_score <= 2) && (y5_score >= 3)) { // approximated condition for Y1=ข/ง and Y5=ก
+                group = 3; 
+            } else if (avgX >= 2.75 && avgY >= 2.50 && avgY <= 3.25) {
+                group = 4;
+            } else if (avgX >= 3.25 && avgY >= 3.25) {
+                group = 5;
+            } else {
+                // Fallback logical groupings based on scores if conditions don't strictly match
+                if (avgX >= 3 && avgY >= 3) group = 5;
+                else if (avgX >= 2.5 && avgY >= 2.5) group = 4;
+                else if (avgY >= 2.5) group = 3;
+                else if (avgX >= 1.75) group = 2;
+                else group = 1;
+            }
+
+            const gData = groups[group - 1];
+            
+            document.getElementById('result-group-number').innerText = `กลุ่มที่ ${group} / Group ${group}`;
+            document.getElementById('result-group-number').className = `text-sm font-semibold mb-2 text-${gData.color.replace('bg-', '')}`;
+            document.getElementById('result-icon').className = `w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-white ${gData.color}`;
+            document.getElementById('result-title').innerText = gData.title;
+            document.getElementById('result-subtitle').innerText = gData.sub;
+            document.getElementById('result-desc').innerText = gData.desc;
+            
+            // Render extended details
+            document.getElementById('result-image').src = gData.image;
+            document.querySelector('#result-detail-1 span').innerText = gData.detail1;
+            document.querySelector('#result-detail-2 span').innerText = gData.detail2;
+            document.querySelector('#result-detail-3 span').innerText = gData.detail3;
+            
+            // Need to re-render lucide icons if they were hidden or dynamically added, but since they are static HTML, no need.
+            // Just in case:
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

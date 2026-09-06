@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบประเมินและวินิจฉัยศักยภาพองค์กรผู้ใช้น้ำ</title>
+    
+    <!-- Google Fonts: Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Colors and Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="relative bg-gradient-to-br from-primary-600 to-primary-700 text-white overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div class="max-w-6xl mx-auto px-4 py-20 md:py-28 relative z-10">
+                <div class="text-center max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                        ระบบประเมินและวินิจฉัยศักยภาพ<br />องค์กรผู้ใช้น้ำ
+                    </h1>
+                    <p class="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                        เครื่องมือประเมินระดับความเข้มแข็งขององค์กรผู้ใช้น้ำ ตามพระราชบัญญัติทรัพยากรน้ำ พ.ศ. 2561 เพื่อพัฒนาสู่การจัดสรรทรัพยากรน้ำอย่างยั่งยืน
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="#assessment" class="inline-flex items-center justify-center bg-white text-primary-700 font-semibold px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
+                            เริ่มทำแบบประเมิน <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                        </a>
+                        <a href="#about" class="inline-flex items-center justify-center bg-primary-700/50 text-white border border-primary-500 font-semibold px-8 py-3 rounded-full hover:bg-primary-700 transition-colors">
+                            เรียนรู้เพิ่มเติม
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-0 inset-x-0">
+                <svg viewBox="0 0 1440 120" class="w-full h-auto text-slate-50 fill-current" preserveAspectRatio="none">
+                    <path d="M0,120 L1440,120 L1440,30 L0,120 Z"></path>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Rationale Section -->
+        <section id="about" class="py-20 bg-slate-50">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="flex flex-col md:flex-row gap-12 items-center">
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center">
+                            <i data-lucide="info" class="w-8 h-8 text-primary-600 mr-3"></i>
+                            หลักการและเหตุผล
+                        </h2>
+                        <div class="space-y-4 text-slate-600 leading-relaxed text-lg">
+                            <p>
+                                ตามพระราชบัญญัติทรัพยากรน้ำ พ.ศ. 2561 ได้รับรองสิทธิการรวมกลุ่มของประชาชนเป็น <strong>"องค์กรผู้ใช้น้ำ"</strong> เพื่อประโยชน์ในการบริหารจัดการ พัฒนา อนุรักษ์ ฟื้นฟู และบำรุงรักษาทรัพยากรน้ำ
+                            </p>
+                            <p>
+                                แบบประเมินชุดนี้ออกแบบมาเพื่อวิเคราะห์สถานะและความเข้มแข็งขององค์กรผู้ใช้น้ำใน 2 มิติ คือ 
+                                <strong>การมีส่วนร่วมของสมาชิก</strong> และ <strong>ความสามารถในการบริหารจัดการ</strong> 
+                                เพื่อนำไปสู่การพัฒนาแผนแม่บทการบริหารทรัพยากรน้ำระดับพื้นที่ได้อย่างมีประสิทธิภาพ
+                            </p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 grid grid-cols-2 gap-4">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
+                            <div class="w-12 h-12 bg-blue-100 text-primary-600 rounded-full flex items-center justify-center mb-4">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-semibold text-slate-800 mb-2">รวมกลุ่มจัดตั้ง</h3>
+                            <p class="text-sm text-slate-500">รวมตัวกันเพื่อประโยชน์ร่วมกันในการบริหารจัดการน้ำ</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center mt-8">
+                            <div class="w-12 h-12 bg-blue-100 text-primary-600 rounded-full flex items-center justify-center mb-4">
+                                <i data-lucide="shield-check" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-semibold text-slate-800 mb-2">ตัวแทนระดับชาติ</h3>
+                            <p class="text-sm text-slate-500">มีสิทธิเป็นตัวแทนในคณะกรรมการทรัพยากรน้ำแห่งชาติ</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
+                            <div class="w-12 h-12 bg-blue-100 text-primary-600 rounded-full flex items-center justify-center mb-4">
+                                <i data-lucide="file-text" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-semibold text-slate-800 mb-2">เสนอแผนงาน</h3>
+                            <p class="text-sm text-slate-500">มีบทบาทในการเสนอแนะแผนงานและมาตรการต่างๆ</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center mt-8">
+                            <div class="w-12 h-12 bg-blue-100 text-primary-600 rounded-full flex items-center justify-center mb-4">
+                                <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="font-semibold text-slate-800 mb-2">จัดสรรและจัดการ</h3>
+                            <p class="text-sm text-slate-500">ร่วมบริหารจัดการและจัดทำข้อตกลงการใช้น้ำ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-slate-800 mb-4">5 กลุ่มสถานะองค์กรผู้ใช้น้ำ</h2>
+                    <p class="text-slate-600 max-w-2xl mx-auto">
+                        ผลการประเมินจะจำแนกศักยภาพขององค์กรผู้ใช้น้ำออกเป็น 5 กลุ่ม เพื่อให้หน่วยงานที่เกี่ยวข้องสามารถออกแบบแนวทางการส่งเสริมได้อย่างตรงจุด
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-slate-100 text-slate-600">
+                            กลุ่มที่ 1
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-1">กลุ่มในนาม / พักตัว</h3>
+                        <p class="text-sm text-slate-500 font-medium mb-4">Paper/Dormant</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            มีการจดทะเบียนแต่ไม่มีการดำเนินกิจกรรมอย่างต่อเนื่อง ขาดการมีส่วนร่วมของสมาชิก
+                        </p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="p-6 rounded-2xl border border-orange-200 bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-orange-100 text-orange-700">
+                            กลุ่มที่ 2
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-1">กลุ่มพึ่งพารัฐ</h3>
+                        <p class="text-sm text-slate-500 font-medium mb-4">State-Dependent</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            ดำเนินกิจกรรมได้เมื่อมีงบประมาณหรือเจ้าหน้าที่รัฐคอยกำกับดูแล ยังไม่สามารถบริหารจัดการตนเองได้เต็มที่
+                        </p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="p-6 rounded-2xl border border-purple-200 bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-purple-100 text-purple-700">
+                            กลุ่มที่ 3
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-1">กลุ่มผู้นำเดี่ยว</h3>
+                        <p class="text-sm text-slate-500 font-medium mb-4">Single-Leader Dominated</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            มีผลงานโดดเด่นแต่พึ่งพาผู้นำคนใดคนหนึ่งเป็นหลัก ขาดการกระจายอำนาจและการสร้างผู้สืบทอด
+                        </p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="p-6 rounded-2xl border border-blue-200 bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-blue-100 text-blue-700">
+                            กลุ่มที่ 4
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-1">กลุ่มจัดการตนเอง</h3>
+                        <p class="text-sm text-slate-500 font-medium mb-4">Collective Self-Governing</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            สมาชิกร่วมกันตั้งกติกา มีการลงขันหรือกองทุน และบริหารจัดการข้อขัดแย้งในชุมชนได้ด้วยตนเอง
+                        </p>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="p-6 rounded-2xl border border-green-200 bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-green-100 text-green-700">
+                            กลุ่มที่ 5
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-1">กลุ่มบูรณาการเชิงนโยบาย</h3>
+                        <p class="text-sm text-slate-500 font-medium mb-4">Dynamic Champion</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            มีความเข้มแข็งสูง สามารถต่อรอง เชื่อมโยงเครือข่ายภายนอก และผลักดันนโยบายระดับลุ่มน้ำได้
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="assessment" class="py-20 bg-primary-50">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6">พร้อมที่จะประเมินองค์กรของคุณหรือยัง?</h2>
+                <p class="text-lg text-slate-600 mb-8">
+                    แบบประเมินประกอบด้วยคำถามแบบเลือกตอบพฤติกรรม (Behavioral Choice) จำนวน 20 ข้อ ใช้เวลาประมาณ 10-15 นาที
+                </p>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-primary-100 mb-8 max-w-2xl mx-auto text-left">
+                    <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-2"></i> สิ่งที่ควรเตรียมก่อนเริ่มทำ
+                    </h3>
+                    <ul class="space-y-3 text-slate-600">
+                        <li class="flex items-start">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 mr-3 flex-shrink-0"></span>
+                            <span>ข้อมูลพื้นฐานขององค์กรผู้ใช้น้ำ (ปีที่ก่อตั้ง, จำนวนสมาชิก, งบประมาณ)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 mr-3 flex-shrink-0"></span>
+                            <span>การตอบคำถามควรตอบตามความเป็นจริง เพื่อให้ได้ผลการวินิจฉัยที่แม่นยำที่สุด</span>
+                        </li>
+                    </ul>
+                </div>
+                <a href="assessment.html" class="inline-block bg-primary-600 text-white font-semibold px-8 py-3 rounded-full hover:bg-primary-700 transition-colors shadow-md">
+                    เริ่มทำแบบประเมิน
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="mb-4">โครงการประเมินศักยภาพองค์กรผู้ใช้น้ำ ตาม พ.ร.บ. ทรัพยากรน้ำ 2561</p>
+            <p class="text-sm">© 2024 All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
